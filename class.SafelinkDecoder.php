@@ -2,8 +2,8 @@
 class SafelinkDecoder{
 	public static $author      = "Semicolon;";
 	public static $description = "Safelink Dekoder Gratis, hanya untuk safelink berbasis Base64. Created with Love Semicolon;";
-	public static $parameter   = array("site","url","r","go");
-	public static $shortlink   = array("www.telondasmu.com","ani-share.com","coeg.in","short.awsubs.co","st.awsubs.co","www.shortenurl.pw","bagilagi.com");
+	public static $parameter   = array("site","url","r","go","id","get");
+	public static $shortlink   = array("www.telondasmu.com","ani-share.com","coeg.in","short.awsubs.co","st.awsubs.co","www.shortenurl.pw","bagilagi.com","autofans.pw");
 	public static function filter($url, $name, $raw = false){
 		$parsing = parse_url($url);
 		if(isset($parsing["query"])){
@@ -50,7 +50,7 @@ class SafelinkDecoder{
 									}
 								}
 							}
-						}elseif((strpos($data, "ani-share") || strpos($data, "bagilagi.com")) == true){
+						}elseif((strpos($data, "ani-share") || strpos($data, "bagilagi.com") || strpos($data, "autofans.pw")) == true){
 							$source = file_get_contents($data);
 							$pattern = "/(var\s*a=[\"']+?\s*(?P<link>\S+)\s*[\"']+?)/i";
 							preg_match_all($pattern, $source, $output);
