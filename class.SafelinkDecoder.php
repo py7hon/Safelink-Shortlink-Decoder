@@ -1,15 +1,9 @@
 <?php
-/**
- * @author	Semicolon;
- * @github	https://github.com/semicolonsmith/Safelink-Shortlink-Decoder
- * @date	7 Juli 2017
- * @version	1.0
- **/
 class SafelinkDecoder{
 	public static $author      = "Semicolon;";
-	public static $description = "Coded by Semicolon;";
+	public static $description = "Safelink Dekoder Gratis, hanya untuk safelink berbasis Base64. Created with Love Semicolon;";
 	public static $parameter   = array("site","url","r","go");
-	public static $shortlink   = array("www.telondasmu.com", "ani-share.com","coeg.in");
+	public static $shortlink   = array("www.telondasmu.com","ani-share.com","coeg.in","short.awsubs.co","st.awsubs.co","www.shortenurl.pw","bagilagi.com");
 	public static function filter($url, $name, $raw = false){
 		$parsing = parse_url($url);
 		if(isset($parsing["query"])){
@@ -45,7 +39,7 @@ class SafelinkDecoder{
 				case "site_url_data":
 				foreach(self::$shortlink as $url){
 					if(strpos($data, $url) == true){
-						if(strpos($data, "telondasmu") == true || strpos($data, "coeg") == true){
+						if(strpos($data, "telondasmu.com") == true || strpos($data, "coeg.in") == true){
 							$source = file_get_contents($data);
 							$pattern = '/(href=[\'"]+?\s*(?P<link>\S+)\s*[\'"]+?)/i';
 							preg_match_all($pattern, $source, $output);
@@ -56,7 +50,7 @@ class SafelinkDecoder{
 									}
 								}
 							}
-						}elseif(strpos($data, "ani-share") == true){
+						}elseif((strpos($data, "ani-share") || strpos($data, "bagilagi.com")) == true){
 							$source = file_get_contents($data);
 							$pattern = "/(var\s*a=[\"']+?\s*(?P<link>\S+)\s*[\"']+?)/i";
 							preg_match_all($pattern, $source, $output);
@@ -65,6 +59,14 @@ class SafelinkDecoder{
 							}else{
 								return $ouput["link"][0];
 							}
+						}elseif((strpos($data, "short.awsubs.co") || strpos($data, "st.awsubs.co")) == true){
+						    $source = file_get_contents($data);
+						    preg_match_all("'<a\s*href=[\"\"]+?\s*(?P<link>\S+)\s*[\"\"]+?\s*rel=\"nofollow\"\s*target=\"_blank\"><b>'si", $source, $match);
+						    return $match["link"][0];
+						}elseif(strpos($data, "shortenurl.pw") == true){
+						    $source = file_get_contents($data);
+						    preg_match_all("'window.location=[\"\"]+?\s*(?P<link>\S+)\s*[\"\"]+?'si", $source, $match);
+						    return $match["link"][0];
 						}
 					}
 				}
